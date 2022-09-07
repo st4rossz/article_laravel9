@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 
+use function PHPSTORM_META\type;
+
 class ArticleController extends Controller
 {
     /**
@@ -14,8 +16,8 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $data['articles'] = Article::orderBy('id', 'desc')->paginate(5);
-        return view('articles.index', $data);
+        $data['articles'] = Article::orderBy('id')->paginate(20);
+        return view('backend.index', $data);
     }
 
     /**
@@ -25,7 +27,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
+        return view('backend.add');
     }
 
     /**
@@ -36,7 +38,21 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'type' => 'required',
+            'title' => 'required',
+            'detail' => 'required',
+        ]);
+
+        $post = Article::create([
+            'type' => $request->type,
+            'title' => $request->title,
+            'detail' => $request->detail,
+            'image' => 'xxsdsada',
+            'views' => 1
+        ]);
+
+        return redirect()->route('article.index');
     }
 
     /**
@@ -47,7 +63,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        //
+
     }
 
     /**
@@ -58,7 +74,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        //
+        return view('backend.edit', ['ar' => $article]);
     }
 
     /**
@@ -70,7 +86,18 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+        $validatedData = $request->validate([
+            'type' => 'required',
+            'title' => 'required',
+            'detail' => 'required',
+        ]);
+
+        $article->type = $request->type;
+        $article->title = $request->title;
+        $article->detail = $request->detail;
+        $article->update();
+
+        return redirect()->route('article.index');
     }
 
     /**
@@ -81,6 +108,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        $article->delete();
+        return redirect()->route('article.index');
     }
 }
