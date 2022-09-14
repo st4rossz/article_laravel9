@@ -13,7 +13,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="image">Choose your image</label>
-                            <input type="file" class="form-control" id="image">
+                            <input type="file" class="form-control" id="image" name="image">
                         </div>
                     </div>
                 </div>

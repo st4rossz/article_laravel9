@@ -38,19 +38,42 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+
         $validatedData = $request->validate([
-            'type' => 'required',
-            'title' => 'required',
-            'detail' => 'required',
+            'type' => ['required', 'string'],
+            'title' => ['required', 'string'],
+            'detail' => ['nullable', 'string'],
+            'image' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
+            'views' => ['nullalble', 'integer'],
         ]);
 
-        $post = Article::create([
-            'type' => $request->type,
-            'title' => $request->title,
-            'detail' => $request->detail,
-            'image' => 'xxsdsada',
-            'views' => 1
-        ]);
+        // $imagePath = null;
+        // if ($request->hasFile('image')) {
+        //     $imagePath = $request->file('image')->store('image', 'public');
+        // }
+
+        $input = $request->all();
+
+        // $path = $request->image->store('public/photos');
+        // $replace_path = str_replace("public", "storage", $path);
+
+        // $post = Article::create([
+        //     'type' => $request->type,
+        //     'title' => $request->title,
+        //     'detail' => $request->detail,
+        //     'image' => $replace_path,
+        //     'views' => $request->views,
+        // ]);
+
+        if ($image = $request->file('image')) {
+            $path = 'public/photos';
+            $replace_path = str_replace("public", "storage", $path);
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($replace_path, $profileImage);
+            $input['image'] = "$profileImage";
+        }
+
+        Article::create($input);
 
         return redirect()->route('article.index');
     }
@@ -63,7 +86,6 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-
     }
 
     /**
@@ -92,6 +114,17 @@ class ArticleController extends Controller
             'detail' => 'required',
         ]);
 
+        if ($request->file('image') != null) {
+            $image = Article::putFile('public/photos', $request->file('image'));
+            $save_image =  $article->image = basename($image);
+        } else {
+            $save_image = '';
+        }
+
+        // $path = $request->image->store('public/photos');
+        // $replace_path = str_replace("public", "storage", $path);
+
+        $save_image;
         $article->type = $request->type;
         $article->title = $request->title;
         $article->detail = $request->detail;

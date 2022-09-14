@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
     public function home()
     {
-        return view('articles.index');
+        $data['articles'] = Article::orderBy('id')->paginate(20);
+        return view('articles.index', $data);
     }
 
     public function hotarticle()
