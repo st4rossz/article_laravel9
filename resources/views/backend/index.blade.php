@@ -28,7 +28,7 @@
                     </td>
                     <td>{{ $article->title }}</td>
                     <td>{{ $article->detail }}</td>
-                    <td><img src="{{ url('storage/photos/' . $article->image) }}" class="w-50 mx-auto d-flex" alt="" />
+                    <td><img src="{{ url('storage/images/'. $article->image) }}" class="w-50 mx-auto d-flex" alt="" />
                     </td>
                     <td class="d-flex"><a type="button" class="btn btn-warning"
                             href="{{ route('article.edit', $article->id) }}">แก้ไข</a>

@@ -14,6 +14,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="image">Choose your image</label>
+                            <img src="{{ url('storage/images/'. $ar->image) }}" class="w-50 mx-auto d-flex mb-3 justify-content-start" alt="" />
                             <input type="file" class="form-control" id="image" name="image">
                         </div>
                     </div>

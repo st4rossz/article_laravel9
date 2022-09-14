@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use function PHPSTORM_META\type;
 
@@ -66,11 +67,12 @@ class ArticleController extends Controller
         // ]);
 
         if ($image = $request->file('image')) {
-            $path = 'public/photos';
-            $replace_path = str_replace("public", "storage", $path);
-            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-            $image->move($replace_path, $profileImage);
-            $input['image'] = "$profileImage";
+            // $path = 'storage/images';
+            // $replace_path = str_replace("public", "storage", $path);
+            // $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            // $image->move($path, $profileImage);
+            $profileImage = Storage::putFile('public/images', $request->file('image'));
+            $input['image'] = basename($profileImage);
         }
 
         Article::create($input);
@@ -109,13 +111,14 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         $validatedData = $request->validate([
+            'image'=>'required',
             'type' => 'required',
             'title' => 'required',
             'detail' => 'required',
         ]);
 
-        if ($request->file('image') != null) {
-            $image = Article::putFile('public/photos', $request->file('image'));
+        if ($image = $request->file('image')) {
+            $image = Storage::putFile('public/images', $request->file('image'));
             $save_image =  $article->image = basename($image);
         } else {
             $save_image = '';
