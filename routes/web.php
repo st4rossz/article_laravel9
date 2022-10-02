@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\PageController;
 use App\Models\Article;
 
@@ -21,4 +22,5 @@ Route::get('/', function () {
 });
 
 Route::resource('article', ArticleController::class);
+Route::resource('banner', BannerController::class);
 Route::get('/', [PageController::class, 'home']);

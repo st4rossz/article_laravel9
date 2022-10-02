@@ -16,17 +16,19 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">AdminPage</a>
+            <a class="navbar-brand" href="{{ route('article.index') }}">AdminPage</a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{{ url('/') }}">UserPage</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url('banner') }}">Banner</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
-
     <div class="container">
         @yield('content')
     </div>

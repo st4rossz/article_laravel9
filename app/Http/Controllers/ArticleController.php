@@ -6,7 +6,9 @@ use App\Models\Article;
 use Illuminate\Console\View\Components\Alert as ComponentsAlert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use \Illuminate\Filesystem\Filesystem;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Banner;
 
 use function PHPSTORM_META\type;
 
@@ -50,29 +52,9 @@ class ArticleController extends Controller
             'views' => ['nullalble', 'integer'],
         ]);
 
-        // $imagePath = null;
-        // if ($request->hasFile('image')) {
-        //     $imagePath = $request->file('image')->store('image', 'public');
-        // }
-
         $input = $request->all();
 
-        // $path = $request->image->store('public/photos');
-        // $replace_path = str_replace("public", "storage", $path);
-
-        // $post = Article::create([
-        //     'type' => $request->type,
-        //     'title' => $request->title,
-        //     'detail' => $request->detail,
-        //     'image' => $replace_path,
-        //     'views' => $request->views,
-        // ]);
-
         if ($request->file('image') != null) {
-            // $path = 'storage/images';
-            // $replace_path = str_replace("public", "storage", $path);
-            // $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-            // $image->move($path, $profileImage);
             $profileImage = Storage::putFile('public/images', $request->file('image'));
             $input['image'] = basename($profileImage);
         } else {
@@ -94,6 +76,10 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
+        $article->increment('views');
+        $article['banners'] = Banner::orderBy('id')->get();
+        // dd($article['banners']);
+        return view('articles.article', ['article' => $article]);
     }
 
     /**
@@ -117,10 +103,14 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         $validatedData = $request->validate([
-            'type' => 'required',
-            'title' => 'required',
-            'detail' => 'required',
+            'type' => ['required', 'string'],
+            'title' => ['required', 'string'],
+            'detail' => ['nullable', 'string'],
+            'image' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
+            'views' => ['nullalble', 'integer'],
         ]);
+
+        $request->all();
 
         if ($image = $request->file('image') != null) {
             $image = Storage::putFile('public/images', $request->file('image'));
@@ -129,16 +119,14 @@ class ArticleController extends Controller
             $save_image = '';
         }
 
-        Alert::Success('แจ้งเตือน!', 'แก้ไขข้อมูลสำเร็จ');
-
-        // $path = $request->image->store('public/photos');
-        // $replace_path = str_replace("public", "storage", $path);
-
         $save_image;
         $article->type = $request->type;
         $article->title = $request->title;
         $article->detail = $request->detail;
-        $article->update();
+
+        if ($article->update()) {
+            Alert::Success('แจ้งเตือน!', 'แก้ไขข้อมูลสำเร็จ');
+        }
 
         return redirect()->route('article.index');
     }
@@ -151,15 +139,13 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-       
+        $path = public_path('storage/images/' . $article->image);
 
         if ($article->image != null) {
-             $image_path = 'storage/images/' . $article->image;
-            unlink($image_path);
-            $article->delete();
-        } else {
-            $article->delete();
-        };
+            unlink($path);
+        }
+
+        $article->delete();
 
         Alert::success('แจ้งเตือน', 'ลบข้อมูลสำเร็จ');
         return redirect()->route('article.index');

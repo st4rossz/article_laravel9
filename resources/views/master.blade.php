@@ -14,16 +14,16 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light ">
         <div class="container">
             <a class="navbar-brand" href="{{ url('article') }}">LOGO</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> --}}
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="">หน้าแรก</a>
                     </li>
@@ -36,46 +36,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">ข่าวฟุตบอล</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#scrolltest">testscroll</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="https://dummyimage.com/1920x400/000/fff" class="d-block w-100"
-                    alt="https://dummyimage.com/1920x400/000/fff">
-            </div>
-            <div class="carousel-item">
-                <img src="https://dummyimage.com/1920x400/000/fff" class="d-block w-100"
-                    alt="https://dummyimage.com/1920x400/000/fff">
-            </div>
-            <div class="carousel-item">
-                <img src="https://dummyimage.com/1920x400/000/fff" class="d-block w-100"
-                    alt="https://dummyimage.com/1920x400/000/fff">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-
-    <div class="container">
-        @yield('content')
-    </div>
+    @yield('content')
 
     <footer>
-        <div class="main">
-
-        </div>
+        <div class="main">Article footer</div>
+        <div class="copyright">Copyright</div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
